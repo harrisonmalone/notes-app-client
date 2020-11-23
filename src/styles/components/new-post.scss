@@ -1,0 +1,24 @@
+#post {
+  resize: none;
+  width: 100%;
+  height: 500px;
+  border: none;
+  font-size: x-large;
+  &:focus {
+    outline: none;
+  }
+}
+
+.save-btn {
+  width: 100px;
+  height: 50px;
+  position: fixed;
+  right: 40px;
+  top: 50px;
+}
+
+@media only screen and (min-width: 600px) {
+  .save-btn {
+    display: none;
+  }
+}
