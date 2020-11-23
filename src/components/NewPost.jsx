@@ -63,10 +63,10 @@ const NewPost = () => {
           // if the post is totally new post request
           // then add to state that post has been created, could potentially also change the url
           createPost();
+          setCommand(false);
+          setSaved(true);
         }
       }
-      setCommand(false);
-      setSaved(true);
     }
   };
 
@@ -88,7 +88,7 @@ const NewPost = () => {
       <button onClick={saveBtn} className="save-btn">
         Save
       </button>
-      <form>
+      <form className="new-post-form">
         {!saved && <p><span className="unsaved">Unsaved</span></p>}
         <textarea
           autoFocus

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-const Posts = ({ authenticated }) => {
+const Posts = ({ authenticated, setLoading }) => {
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
@@ -36,6 +36,12 @@ const Posts = ({ authenticated }) => {
     return bool ? "Public" : "Private"
   }
 
+  const logout = (e) => {
+    e.preventDefault()
+    localStorage.removeItem("token")
+    window.location.reload()
+  }
+
   const onDeleteLinkClick = async (e, id) => {
     e.preventDefault()
     const removedPost = posts.filter((post) => post.id !== id)
@@ -52,7 +58,13 @@ const Posts = ({ authenticated }) => {
   return (
     posts && (
       <div>
-        {authenticated && <Link to="/"><button style={{width: "100px", height: "40px"}}>Write</button></Link>}
+        {authenticated && (
+            <>
+              <Link to="/"><button style={{width: "100px", height: "40px", marginRight: "10px"}}>Write</button></Link>
+              <Link to="/posts"><button style={{width: "100px", height: "40px"}} onClick={logout}>Logout</button></Link>
+            </>
+          )
+        }
         {posts.map((post, index) => {
           if (authenticated || post.public) {            
             return (

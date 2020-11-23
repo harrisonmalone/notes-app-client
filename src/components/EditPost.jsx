@@ -4,7 +4,7 @@ const EditPost = (props) => {
   const [saved, setSaved] = useState(true);
   const [body, setBody] = useState("");
   const [command, setCommand] = useState(null);
-  const id = props.match.params.id
+  const id = props.match.params.id;
 
   const editPost = async () => {
     await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
@@ -36,6 +36,12 @@ const EditPost = (props) => {
     }
   };
 
+  const saveBtn = (e) => {
+    e.preventDefault();
+    editPost();
+    setSaved(true)
+  };
+
   useEffect(() => {
     document.addEventListener("keydown", save);
     return () => {
@@ -45,7 +51,9 @@ const EditPost = (props) => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/posts/${id}`
+      );
       const post = await response.json();
       setBody(post.body);
     };
@@ -58,18 +66,25 @@ const EditPost = (props) => {
     setSaved(false);
   };
 
-  return body && (
-    <form>
-      {!saved && <p>Unsaved</p>}
-      <textarea
-        autoFocus
-        name="post"
-        id="post"
-        placeholder="Type something..."
-        onChange={onPostChange}
-        value={body}
-      ></textarea>
-    </form>
+  return (
+    body && (
+      <>
+        <button onClick={saveBtn} className="save-btn">
+          Save
+        </button>
+        <form className="new-post-form">
+          {!saved && <p>Unsaved</p>}
+          <textarea
+            autoFocus
+            name="post"
+            id="post"
+            placeholder="Type something..."
+            onChange={onPostChange}
+            value={body}
+          ></textarea>
+        </form>
+      </>
+    )
   );
 };
 

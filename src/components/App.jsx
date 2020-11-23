@@ -14,7 +14,7 @@ const App = () => {
 
   useEffect(() => {
     const fetchAuthenticated = async () => {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/status`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/status`, {
         headers: {
           "Content-Type": "application/json",
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -39,7 +39,7 @@ const App = () => {
         <ProtectedRoute path="/" exact component={NewPost} />
         <Route path="/login" exact component={Login} />
         <Route path="/posts" exact render={(props) => {
-          return <Posts {...props} authenticated={authenticated} />
+          return <Posts {...props} setLoading={setLoading} authenticated={authenticated} />
         }} />
         <Route path="/posts/:id" exact component={Post} />
         <Route path="/posts/:id/edit" exact component={EditPost} />

@@ -9,7 +9,7 @@ class ProtectedRoute extends React.Component {
 
   async componentDidMount() {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/status`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/status`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -29,6 +29,7 @@ class ProtectedRoute extends React.Component {
       });
     }
   }
+  
   render() {
     const { loading, auth } = this.state;
     if (!loading && !auth) {
