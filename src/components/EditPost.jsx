@@ -7,7 +7,7 @@ const EditPost = (props) => {
   const id = props.match.params.id
 
   const editPost = async () => {
-    await fetch(`http://localhost:3000/posts/${id}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ const EditPost = (props) => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch(`http://localhost:3000/posts/${id}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`);
       const post = await response.json();
       setBody(post.body);
     };

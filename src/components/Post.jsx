@@ -7,7 +7,7 @@ const Post = (props) => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch(`http://localhost:3000/posts/${id}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`);
       const post = await response.json();
       const converter = new showdown.Converter();
       const html = converter.makeHtml(post.body);

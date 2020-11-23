@@ -8,7 +8,7 @@ const NewPost = () => {
   const [command, setCommand] = useState(null);
 
   const createPost = async () => {
-    const response = await fetch("http://localhost:3000/posts", {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ const NewPost = () => {
   };
 
   const editPost = async () => {
-    await fetch(`http://localhost:3000/posts/${id}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

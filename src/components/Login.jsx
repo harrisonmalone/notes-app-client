@@ -9,7 +9,7 @@ const Login = () => {
     e.preventDefault();
     const body = { auth: { email: "h@gmail.com", password }}
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

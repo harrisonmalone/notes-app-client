@@ -7,7 +7,7 @@ const Posts = ({ authenticated }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch("http://localhost:3000/posts");
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`);
       const posts = await response.json();
       console.log(posts)
       setPosts(posts);
@@ -17,7 +17,7 @@ const Posts = ({ authenticated }) => {
 
   const togglePrivacy = async (e, post) => {
     e.preventDefault()
-    await fetch(`http://localhost:3000/posts/${post.id}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${post.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +27,7 @@ const Posts = ({ authenticated }) => {
         post: { body: post.body, public: !post.public },
       }),
     });
-    const response = await fetch("http://localhost:3000/posts");
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`);
     const posts = await response.json();
     setPosts(posts);
   }
@@ -40,7 +40,7 @@ const Posts = ({ authenticated }) => {
     e.preventDefault()
     const removedPost = posts.filter((post) => post.id !== id)
     setPosts(removedPost)
-    fetch(`http://localhost:3000/posts/${id}`, {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -14,7 +14,7 @@ const App = () => {
 
   useEffect(() => {
     const fetchAuthenticated = async () => {
-      const response = await fetch(`http://localhost:3000/status`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/status`, {
         headers: {
           "Content-Type": "application/json",
           'Authorization': `Bearer ${localStorage.getItem('token')}`
