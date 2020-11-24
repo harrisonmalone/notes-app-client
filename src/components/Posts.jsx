@@ -22,7 +22,7 @@ const Posts = () => {
       }
     };
     fetchPosts();
-  }, []);
+  }, [authenticated]);
 
   const togglePrivacy = async (e, post) => {
     e.preventDefault()
