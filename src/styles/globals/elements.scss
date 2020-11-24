@@ -1,5 +1,5 @@
 * {
-  font-family: 'Inconsolata', monospace;
+  font-family: serif;
 }
 
 body {
@@ -15,4 +15,8 @@ pre {
   background: rgb(39,	40, 34);
   padding: 20px;
   color: white;
+}
+
+code {
+  font-family: 'Inconsolata', monospace;
 }
