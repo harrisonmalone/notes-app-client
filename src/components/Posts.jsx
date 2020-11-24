@@ -2,15 +2,24 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-const Posts = ({ authenticated, setLoading }) => {
-  const [posts, setPosts] = useState(null);
+const Posts = () => {
+  const [posts, setPosts] =  useState(null)
+  const [authenticated, setAuthenticated] = useState(false)
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`);
-      const posts = await response.json();
-      console.log(posts)
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      const { posts, current_user: currentUser } = await response.json();
       setPosts(posts);
+      if (currentUser) {
+        setAuthenticated(true)
+      } else {
+        setAuthenticated(false)
+      }
     };
     fetchPosts();
   }, []);
@@ -27,8 +36,12 @@ const Posts = ({ authenticated, setLoading }) => {
         post: { body: post.body, public: !post.public },
       }),
     });
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`);
-    const posts = await response.json();
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    const { posts } = await response.json();
     setPosts(posts);
   }
 
@@ -44,15 +57,20 @@ const Posts = ({ authenticated, setLoading }) => {
 
   const onDeleteLinkClick = async (e, id) => {
     e.preventDefault()
-    const removedPost = posts.filter((post) => post.id !== id)
-    setPosts(removedPost)
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       }
     });
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    const { posts: updatedPosts } = await response.json();
+    setPosts(updatedPosts);
   }
 
   return (

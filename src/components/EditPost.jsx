@@ -1,53 +1,36 @@
 import { useState, useEffect } from "react";
+import keyboardjs from "keyboardjs";
 
 const EditPost = (props) => {
   const [saved, setSaved] = useState(true);
   const [body, setBody] = useState("");
-  const [command, setCommand] = useState(null);
+  const [loading, setLoading] = useState(true)
   const id = props.match.params.id;
-
-  const editPost = async () => {
-    await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        post: { body },
-      }),
-    });
-  };
-
-  const save = (e) => {
-    if (e.code === "MetaLeft") {
-      setCommand(true);
-      setTimeout(() => {
-        setCommand(false);
-      }, 1000);
-    }
-    if (e.code === "KeyS") {
-      if (command) {
-        e.preventDefault();
-        editPost();
-        setCommand(false);
-        setSaved(true);
-      }
-    }
-  };
 
   const saveBtn = (e) => {
     e.preventDefault();
-    editPost();
-    setSaved(true)
+    setSaved(true);
+  };
+
+  const save = async (e) => {
+    e.preventDefault();
+    setSaved(true);
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", save);
-    return () => {
-      document.removeEventListener("keydown", save);
+    const setBinding = () => {
+      console.log("here in binding");
+      keyboardjs.bind("command + s", save);
     };
-  });
+    setBinding();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      console.log("here in unbinding");
+      keyboardjs.unbind("command + s", save);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -56,24 +39,43 @@ const EditPost = (props) => {
       );
       const post = await response.json();
       setBody(post.body);
+      setLoading(true)
     };
     fetchPost();
   }, [id]);
 
+  useEffect(() => {
+    const editPost = async () => {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          post: { body },
+        }),
+      });
+    };
+    if (saved) {
+      editPost();
+    }
+  });
+
   const onPostChange = async (e) => {
     const body = e.target.value;
     setBody(body);
-    setSaved(false);
+    setSaved(false);  
   };
 
+  const style = { width: "100px", height: "50px", opacity: 0.1 };
+  if (!saved) {
+    style.opacity = 0.7;
+  }
   return (
-    body && (
+    loading && (
       <>
-        <button onClick={saveBtn} className="save-btn">
-          Save
-        </button>
         <form className="new-post-form">
-          {!saved && <p>Unsaved</p>}
           <textarea
             autoFocus
             name="post"
@@ -83,6 +85,18 @@ const EditPost = (props) => {
             value={body}
           ></textarea>
         </form>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "10px 0px",
+          }}
+        >
+          <button onClick={saveBtn} style={style}>
+            Save
+          </button>
+        </div>
       </>
     )
   );

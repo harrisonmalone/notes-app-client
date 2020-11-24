@@ -1,80 +1,73 @@
 import { useState, useEffect } from "react";
+import keyboardjs from "keyboardjs";
 
 const NewPost = () => {
   const [saved, setSaved] = useState(false);
   const [body, setBody] = useState("");
-  const [created, setCreated] = useState(false);
   const [id, setId] = useState(null);
-  const [command, setCommand] = useState(null);
-
-  const createPost = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        post: { body },
-      }),
-    });
-    const { id } = await response.json();
-    setCreated(true);
-    setId(id);
-  };
-
-  const editPost = async () => {
-    await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        post: { body },
-      }),
-    });
-  };
 
   const saveBtn = (e) => {
     e.preventDefault();
-    if (created) {
-      editPost();
-    } else {
-      createPost();
-    }
-    setSaved(true)
+    setSaved(true);
   };
 
-  const save = (e) => {
-    if (e.code === "MetaLeft") {
-      setCommand(true);
-      setTimeout(() => {
-        setCommand(false);
-      }, 1000);
-    }
-    if (e.code === "KeyS") {
-      if (command) {
-        e.preventDefault();
-        if (created) {
-          // if the post is already saved put request
-          editPost();
-        } else {
-          // if the post is totally new post request
-          // then add to state that post has been created, could potentially also change the url
-          createPost();
-          setCommand(false);
-          setSaved(true);
-        }
-      }
-    }
+  const save = async (e) => {
+    e.preventDefault();
+    setSaved(true);
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", save);
-    return () => {
-      document.removeEventListener("keydown", save);
+    const setBinding = () => {
+      console.log("here in binding");
+      keyboardjs.bind("command + s", save);
     };
+    setBinding();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      console.log("here in unbinding");
+      keyboardjs.unbind("command + s", save);
+    };
+  }, []);
+
+  useEffect(() => {
+    const createPost = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            post: { body },
+          }),
+        }
+      );
+      const { id } = await response.json();
+      setId(id);
+    };
+
+    const editPost = async () => {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          post: { body },
+        }),
+      });
+    };
+
+    if (saved && id) {
+      editPost();
+    } else if (saved) {
+      createPost();
+    }
   });
 
   const onPostChange = async (e) => {
@@ -83,13 +76,13 @@ const NewPost = () => {
     setSaved(false);
   };
 
+  const style = { width: "100px", height: "50px", opacity: 0.1 };
+  if (!saved) {
+    style.opacity = 0.7
+  }
   return (
     <>
-      <button onClick={saveBtn} className="save-btn">
-        Save
-      </button>
       <form className="new-post-form">
-        {!saved && <p><span className="unsaved">Unsaved</span></p>}
         <textarea
           autoFocus
           name="post"
@@ -99,6 +92,18 @@ const NewPost = () => {
           value={body}
         ></textarea>
       </form>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "10px 0px"
+        }}
+      >
+        <button onClick={saveBtn} style={style}>
+          Save
+        </button>
+      </div>
     </>
   );
 };

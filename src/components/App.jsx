@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import NewPost from "./NewPost";
 import Posts from "./Posts";
@@ -9,38 +9,15 @@ import Container from "../templates/Container";
 import EditPost from './EditPost'
 
 const App = () => {
-  const [authenticated, setAuthenticated] = useState(false)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchAuthenticated = async () => {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/status`, {
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.status === 200) {
-        setAuthenticated(true)
-        setLoading(false)
-      } else {
-        setLoading(false)
-      }
-    }
-    fetchAuthenticated()
-  }, [])
-
-  return !loading && (
+  return (
     <Container>
-      <h1>
-        <Link to="/posts">🍉</Link>
-      </h1>
+      <nav style={{height: "60px"}}>
+        <h1><Link to="/posts">🍉</Link></h1>
+      </nav>
       <Switch>
         <ProtectedRoute path="/" exact component={NewPost} />
         <Route path="/login" exact component={Login} />
-        <Route path="/posts" exact render={(props) => {
-          return <Posts {...props} setLoading={setLoading} authenticated={authenticated} />
-        }} />
+        <Route path="/posts" exact component={Posts} />
         <Route path="/posts/:id" exact component={Post} />
         <Route path="/posts/:id/edit" exact component={EditPost} />
       </Switch>
