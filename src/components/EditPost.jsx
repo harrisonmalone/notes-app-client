@@ -4,7 +4,7 @@ import keyboardjs from "keyboardjs";
 const EditPost = (props) => {
   const [saved, setSaved] = useState(true);
   const [body, setBody] = useState("");
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(null)
   const id = props.match.params.id;
 
   const saveBtn = (e) => {
