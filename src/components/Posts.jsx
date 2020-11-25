@@ -78,7 +78,7 @@ const Posts = () => {
     const titleLen = title.split(" ").length
     if (titleLen > 8) {
       const regex = /^(?:\S+\s+?){1,8}/
-      title = title.match(regex)
+      title = title.match(regex)[0].trim() + "..."
     }
     return title
   }
