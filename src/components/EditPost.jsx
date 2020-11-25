@@ -19,7 +19,6 @@ const EditPost = (props) => {
 
   useEffect(() => {
     const setBinding = () => {
-      console.log("here in binding");
       keyboardjs.bind("command + s", save);
     };
     setBinding();
@@ -27,7 +26,6 @@ const EditPost = (props) => {
 
   useEffect(() => {
     return () => {
-      console.log("here in unbinding");
       keyboardjs.unbind("command + s", save);
     };
   }, []);

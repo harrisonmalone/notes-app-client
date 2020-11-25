@@ -25,7 +25,6 @@ const Post = (props) => {
     return { __html: html };
   };
 
-  console.log(post);
   return (
     post && (
       <div>

@@ -18,7 +18,6 @@ const NewPost = () => {
 
   useEffect(() => {
     const setBinding = () => {
-      console.log("here in binding");
       keyboardjs.bind("command + s", save);
     };
     setBinding();
@@ -26,7 +25,6 @@ const NewPost = () => {
 
   useEffect(() => {
     return () => {
-      console.log("here in unbinding");
       keyboardjs.unbind("command + s", save);
     };
   }, []);
