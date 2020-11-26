@@ -20,11 +20,11 @@ The user is on the posts page in admin view and then shows one post before going
 
 ![](https://hm-shared-files.s3.ap-southeast-2.amazonaws.com/harrison_malone_features_2.gif)
 
-editing post and deleting post
+The user is on the posts page in the admin view and then clicks on the edit button for one of the posts. Then then edit the post clicking on the save button and head back to the posts page. Lastly the user deletes that posts and the page updates.
 
 ![](https://hm-shared-files.s3.ap-southeast-2.amazonaws.com/harrison_malone_features_3.gif)
 
-preview mode
+The user clicks on preview mode which shows what the posts page looks like when the admin isn't signed in. It removes the CRUD links and privacy toggles. It also displays a little container with some about me information and a link to my projects. The user also visits a single post page again before navigating back to the posts admin view via the nav.
 
 ## Stack
 
