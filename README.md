@@ -14,7 +14,7 @@
 
 ## Demo
 
-![](https://hm-shared-files.s3.ap-southeast-2.amazonaws.com/harrison_malone_features_1.gif)
+![](https://hm-shared-files.s3.ap-southeast-2.amazonaws.com/harrison_malone_features_4.gif)
 
 The user is on the posts page in admin view and then shows one post before going back to the posts admin again via the nav. They then click on the write button that takes the user to the text editor view. The post is saved using command+s key binding.
 
