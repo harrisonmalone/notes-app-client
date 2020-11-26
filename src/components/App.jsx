@@ -7,6 +7,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from "./Login";
 import Container from "../templates/Container";
 import EditPost from './EditPost'
+import Projects from './Projects'
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <ProtectedRoute path="/" exact component={NewPost} />
         <Route path="/login" exact component={Login} />
         <Route path="/posts" exact component={Posts} />
+        <Route path="/projects" exact component={Projects} />
         <Route path="/posts/:id" exact component={Post} />
         <Route path="/posts/:id/edit" exact component={EditPost} />
       </Switch>
