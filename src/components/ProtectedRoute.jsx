@@ -1,50 +1,28 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { getAuthStatus } from "../utils/getAuthStatus";
 
-class ProtectedRoute extends React.Component {
-  state = {
-    auth: false,
-    loading: true,
-  };
+const ProtectedRoute = (props) => {
+  const { auth, loading, setAuth } = useContext(AuthContext);
 
-  async componentDidMount() {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/status`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      if (response.status >= 400) {
-        throw(new Error("not authorized"))
-      } else {        
-        this.setState({
-          auth: true,
-          loading: false,
-        });
-      }
-    } catch(err) {
-      this.setState({
-        loading: false,
-      });
-    }
+  useEffect(() => {
+    getAuthStatus(loading, setAuth);
+  }, [setAuth, loading]);
+
+  if (!loading && !auth) {
+    return <Redirect to="/posts" />;
+  } else {
+    return (
+      !loading && (
+        <Route
+          exact={props.exact}
+          path={props.path}
+          component={props.component}
+        />
+      )
+    );
   }
-  
-  render() {
-    const { loading, auth } = this.state;
-    if (!loading && !auth) {
-      return <Redirect to="/posts" />;
-    } else {
-      return (
-        !loading && (
-          <Route
-            exact={this.props.exact}
-            path={this.props.path}
-            component={this.props.component}
-          />
-        )
-      );
-    }
-  }
-}
+};
 
 export default ProtectedRoute;

@@ -1,21 +1,24 @@
 import { useState } from "react";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const [password, setPassword] = useState("");
-  const history = useHistory()
+  const history = useHistory();
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
-    const body = { auth: { email: "h@gmail.com", password }}
+    const body = { auth: { email: "h@gmail.com", password } };
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
       if (response.status >= 400) {
         throw new Error("incorrect credentials");
       } else {
@@ -23,8 +26,7 @@ const Login = () => {
         localStorage.setItem("token", jwt);
         history.push("/");
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 
   return (

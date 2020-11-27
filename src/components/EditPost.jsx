@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import keyboardjs from "keyboardjs";
+import { Link } from 'react-router-dom'
+import moment from 'moment'
 
 const EditPost = (props) => {
   const [saved, setSaved] = useState(true);
   const [body, setBody] = useState("");
-  const [loading, setLoading] = useState(null)
+  const [createdAt, setCreatedAt] = useState("")
+  const [loading, setLoading] = useState(null);
   const id = props.match.params.id;
 
   const saveBtn = (e) => {
@@ -37,7 +40,8 @@ const EditPost = (props) => {
       );
       const post = await response.json();
       setBody(post.body);
-      setLoading(true)
+      setCreatedAt(post.created_at)
+      setLoading(true);
     };
     fetchPost();
   }, [id]);
@@ -63,7 +67,7 @@ const EditPost = (props) => {
   const onPostChange = async (e) => {
     const body = e.target.value;
     setBody(body);
-    setSaved(false);  
+    setSaved(false);
   };
 
   const style = { width: "100px", height: "50px", opacity: 0.1 };
@@ -73,6 +77,12 @@ const EditPost = (props) => {
   return (
     loading && (
       <>
+        <span style={{ fontSize: "large", color: "#717369" }}>
+          {moment(createdAt).format("MMMM Do YYYY, h:mm:ss a")}
+        </span>
+        <Link to={`/posts/${id}`} className="edit-and-show">
+          <span>Show</span>
+        </Link>
         <form className="new-post-form">
           <textarea
             autoFocus

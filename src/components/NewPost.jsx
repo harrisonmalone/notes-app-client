@@ -76,7 +76,7 @@ const NewPost = () => {
 
   const style = { width: "100px", height: "50px", opacity: 0.1 };
   if (!saved) {
-    style.opacity = 0.7
+    style.opacity = 0.7;
   }
   return (
     <>
@@ -95,7 +95,7 @@ const NewPost = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          margin: "10px 0px"
+          margin: "10px 0px",
         }}
       >
         <button onClick={saveBtn} style={style}>

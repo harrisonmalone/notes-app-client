@@ -1,8 +1,8 @@
-import React, {lazy, Component, Suspense} from 'react'
-import {importMDX} from 'mdx.macro'
+import React, { lazy, Component, Suspense } from "react";
+import { importMDX } from "mdx.macro";
 import moment from "moment";
 
-const Content = lazy(() => importMDX('../markup/Projects.mdx'))
+const Content = lazy(() => importMDX("../markup/Projects.mdx"));
 
 const Projects = (props) => {
   return (
