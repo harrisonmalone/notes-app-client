@@ -14,7 +14,6 @@ import { AuthProvider } from "../context/AuthContext";
 
 const App = () => {
   const [postsLength, setPostsLength] = useState(null);
-  // hi
 
   return (
     <AuthProvider>
