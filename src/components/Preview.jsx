@@ -24,8 +24,8 @@ const Posts = () => {
   const createTitle = (body) => {
     let title = body.split("\n")[0];
     const titleLen = title.split(" ").length;
-    if (titleLen > 8) {
-      const regex = /^(?:\S+\s+?){1,8}/;
+    if (titleLen > 4) {
+      const regex = /^(?:\S+\s+?){1,4}/;
       title = title.match(regex)[0].trim() + "...";
     }
     return title;
