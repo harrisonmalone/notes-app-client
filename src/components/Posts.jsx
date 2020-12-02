@@ -11,8 +11,8 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Posts = ({ setPostsLength }) => {
-  const { auth, setAuth, loading } = useContext(AuthContext);
+const Posts = () => {
+  const { auth, setAuth, loading, setPostLength } = useContext(AuthContext);
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
@@ -80,6 +80,7 @@ const Posts = ({ setPostsLength }) => {
     });
     const { posts: updatedPosts } = await response.json();
     setPosts(updatedPosts);
+    setPostLength(updatedPosts.length)
   };
 
   const createTitle = (body) => {

@@ -6,10 +6,10 @@ export const AppReducer = (state, action) => {
         auth: action.payload.auth,
         loading: action.payload.loading
       }
-    case "SET_POSTS":
+    case "SET_POST_LENGTH":
       return {
         ...state,
-        posts: action.payload
+        postLength: action.payload
       }
     default: 
       return state

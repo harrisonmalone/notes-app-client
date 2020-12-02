@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import keyboardjs from "keyboardjs";
+import { AuthContext } from '../context/AuthContext'
 
 const NewPost = () => {
   const [saved, setSaved] = useState(false);
   const [body, setBody] = useState("");
   const [id, setId] = useState(null);
+  const { setPostLength } = useContext(AuthContext)
 
   const saveBtn = (e) => {
     e.preventDefault();
@@ -46,6 +48,7 @@ const NewPost = () => {
       );
       const { id } = await response.json();
       setId(id);
+      setPostLength("add 1")
     };
 
     const editPost = async () => {

@@ -1,21 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Nav = () => {
-  const { auth } = useContext(AuthContext)
-  const [postLength, setPostLength] = useState(null)
+  const { auth, setPostLength, postLength, loading } = useContext(AuthContext)
 
   useEffect(() => {
     const fetchPostLength = async () => {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/stats`
-      );
-      let { post_length: postLength } = await response.json();
-      setPostLength(postLength);
-    };
+      if (postLength === null && loading) {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/stats`
+        );
+        let { post_length: postLength } = await response.json();
+        setPostLength(postLength);
+      };
+      }
     fetchPostLength();
-  }, []);
+  }, [setPostLength, postLength, loading]);
 
   return (
     <nav>
