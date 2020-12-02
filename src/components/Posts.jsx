@@ -13,7 +13,7 @@ import {
 
 const Posts = ({ setPostsLength }) => {
   const { auth, setAuth, loading } = useContext(AuthContext);
-  const [posts, setPosts] = useState(null)
+  const [posts, setPosts] = useState(null);
 
   useEffect(() => {
     getAuthStatus(loading, setAuth);
@@ -94,54 +94,76 @@ const Posts = ({ setPostsLength }) => {
 
   return (
     posts && (
-      <div>
-        {posts.map((post, index) => {
-          if (auth || post.public) {
-            return (
-              <div key={index}>
-                <h3 style={{ margin: "0px" }}>
-                  <Link to={`/posts/${post.id}`}>{createTitle(post.body)}</Link>
-                </h3>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <p style={{ margin: "0px" }}>
-                    {moment(post.created_at).format("MM/D/YY, HH:mm")}
-                  </p>
-                  {auth && (
-                    <div className="action-icons">
-                      <Link
-                        to="/"
-                        className="post-links"
-                        onClick={(e) => togglePrivacy(e, post)}
-                        style={post.public ? {} : { opacity: 0.7 }}
-                      >
-                        {renderPrivacy(post.public)}
-                      </Link>
-                      <Link
-                        to={`/posts/${post.id}/edit`}
-                        className="post-links"
-                      >
-                        <FontAwesomeIcon icon={faEdit} />
-                      </Link>
-                      <Link
-                        to={`/posts`}
-                        className="post-links"
-                        onClick={(e) => onDeleteLinkClick(e, post.id)}
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </Link>
-                    </div>
-                  )}
+      <>
+        {!auth && (
+          <div
+            className="profile"
+            style={{
+              border: "2px solid black",
+              padding: "10px",
+              margin: "10px 0px",
+            }}
+          >
+            <p>
+              Hi, I'm Harrison. I currently work at{" "}
+              <a href="https://coderacademy.edu.au/">CoderAcademy</a> where I've
+              mentored around 100 students leading classes and assisting with
+              content development. Here are my current{" "}
+              <Link to="/projects">projects</Link>.
+            </p>
+          </div>
+        )}
+        <div>
+          {posts.map((post, index) => {
+            if (auth || post.public) {
+              return (
+                <div key={index}>
+                  <h3 style={{ margin: "0px" }}>
+                    <Link to={`/posts/${post.id}`}>
+                      {createTitle(post.body)}
+                    </Link>
+                  </h3>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p style={{ margin: "0px" }}>
+                      {moment(post.created_at).format("MM/D/YY, HH:mm")}
+                    </p>
+                    {auth && (
+                      <div className="action-icons">
+                        <Link
+                          to="/"
+                          className="post-links"
+                          onClick={(e) => togglePrivacy(e, post)}
+                          style={post.public ? {} : { opacity: 0.7 }}
+                        >
+                          {renderPrivacy(post.public)}
+                        </Link>
+                        <Link
+                          to={`/posts/${post.id}/edit`}
+                          className="post-links"
+                        >
+                          <FontAwesomeIcon icon={faEdit} />
+                        </Link>
+                        <Link
+                          to={`/posts`}
+                          className="post-links"
+                          onClick={(e) => onDeleteLinkClick(e, post.id)}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                  <hr />
                 </div>
-                <hr />
-              </div>
-            );
-          } else {
-            return null;
-          }
-        })}
-      </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </div>
+      </>
     )
   );
 };

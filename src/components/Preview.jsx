@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 const Posts = () => {
-  const [posts, setPosts] = useState(null)
+  const [posts, setPosts] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -33,29 +33,49 @@ const Posts = () => {
 
   return (
     posts && (
-      <div>
-        {posts.map((post, index) => {
-          if (post.public) {
-            return (
-              <div key={index}>
-                <h3 style={{ margin: "0px" }}>
-                  <Link to={`/posts/${post.id}`}>{createTitle(post.body)}</Link>
-                </h3>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <p style={{ margin: "0px" }}>
-                    {moment(post.created_at).format("MM/D/YY, HH:mm")}
-                  </p>
+      <>
+        <div
+          className="profile"
+          style={{
+            border: "2px solid black",
+            padding: "10px",
+            margin: "10px 0px",
+          }}
+        >
+          <p>
+            Hi, I'm Harrison. I currently work at{" "}
+            <a href="https://coderacademy.edu.au/">CoderAcademy</a> where I've
+            mentored around 100 students leading classes and assisting with
+            content development. Here are my current{" "}
+            <Link to="/projects">projects</Link>.
+          </p>
+        </div>
+        <div>
+          {posts.map((post, index) => {
+            if (post.public) {
+              return (
+                <div key={index}>
+                  <h3 style={{ margin: "0px" }}>
+                    <Link to={`/posts/${post.id}`}>
+                      {createTitle(post.body)}
+                    </Link>
+                  </h3>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p style={{ margin: "0px" }}>
+                      {moment(post.created_at).format("MM/D/YY, HH:mm")}
+                    </p>
+                  </div>
+                  <hr />
                 </div>
-                <hr />
-              </div>
-            );
-          } else {
-            return null;
-          }
-        })}
-      </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </div>
+      </>
     )
   );
 };
