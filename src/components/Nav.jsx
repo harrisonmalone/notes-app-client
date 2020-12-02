@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 const Nav = (props) => {
   const { auth } = useContext(AuthContext)
   console.log(auth)
+  // changes
   return (
     <nav>
       <h1>
