@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
 import NewPost from "./NewPost";
 import Posts from "./Posts";
@@ -13,26 +13,15 @@ import Preview from "./Preview";
 import { AuthProvider } from "../context/AuthContext";
 
 const App = () => {
-  const [postsLength, setPostsLength] = useState(null);
-
   return (
     <AuthProvider>
       <Container>
-        <Nav postsLength={postsLength} />
+        <Nav />
         <Switch>
           <ProtectedRoute path="/" exact component={NewPost} />
           <ProtectedRoute path="/preview" exact component={Preview} />
           <Route path="/login" exact component={Login} />
-          <Route
-            path="/posts"
-            exact
-            render={(props) => (
-              <Posts
-                {...props}
-                setPostsLength={setPostsLength}
-              />
-            )}
-          />
+          <Route path="/posts" exact component={Posts} />
           <Route path="/projects" exact component={Projects} />
           <Route path="/posts/:id" exact component={Post} />
           <ProtectedRoute path="/posts/:id/edit" exact component={EditPost} />

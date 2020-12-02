@@ -1,9 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
-const Nav = (props) => {
+const Nav = () => {
   const { auth } = useContext(AuthContext)
+  const [postLength, setPostLength] = useState(null)
+
+  useEffect(() => {
+    const fetchPostLength = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/stats`
+      );
+      let { post_length: postLength } = await response.json();
+      setPostLength(postLength);
+    };
+    fetchPostLength();
+  }, []);
+
   return (
     <nav>
       <h1>
@@ -20,9 +33,9 @@ const Nav = (props) => {
             <Link to="/preview" >
               Preview
             </Link>
-          <span>
-            {props.postsLength} posts
-          </span>
+            <span>
+              {postLength} posts
+            </span>
           </>
         )}
       </div>

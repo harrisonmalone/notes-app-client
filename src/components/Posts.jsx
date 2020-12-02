@@ -30,11 +30,10 @@ const Posts = ({ setPostsLength }) => {
         }
       );
       let { posts } = await response.json();
-      setPostsLength(posts.length);
       setPosts(posts);
     };
     fetchPosts();
-  }, [setPostsLength]);
+  }, []);
 
   const togglePrivacy = async (e, post) => {
     e.preventDefault();
@@ -80,7 +79,6 @@ const Posts = ({ setPostsLength }) => {
       },
     });
     const { posts: updatedPosts } = await response.json();
-    setPostsLength(updatedPosts.length)
     setPosts(updatedPosts);
   };
 
