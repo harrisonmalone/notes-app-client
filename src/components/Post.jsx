@@ -42,7 +42,7 @@ const Post = (props) => {
       return (
         <div>
           <span style={{ fontSize: "large", color: "#717369" }}>
-            {moment(post.created_at).format("MMMM Do YYYY, h:mm:ss a")}
+            {moment(post.created_at).format("MM/D/YY, HH:mm")}
           </span>
           {!loading && auth && (
             <Link to={`/posts/${id}/edit`} className="edit-and-show">

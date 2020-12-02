@@ -78,7 +78,7 @@ const EditPost = (props) => {
     loading && (
       <>
         <span style={{ fontSize: "large", color: "#717369" }}>
-          {moment(createdAt).format("MMMM Do YYYY, h:mm:ss a")}
+          {moment(createdAt).format("MM/D/YY, HH:mm")}
         </span>
         <Link to={`/posts/${id}`} className="edit-and-show">
           <span>Show</span>

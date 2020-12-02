@@ -1,13 +1,19 @@
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { AuthContext } from "../context/AuthContext";
 import { getAuthStatus } from "../utils/getAuthStatus";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLock,
+  faLockOpen,
+  faTrashAlt,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 
-const Posts = () => {
-  const [posts, setPosts] = useState(null);
-  const [preview, setPreview] = useState(false);
+const Posts = ({ setPostsLength }) => {
   const { auth, setAuth, loading } = useContext(AuthContext);
+  const [posts, setPosts] = useState(null)
 
   useEffect(() => {
     getAuthStatus(loading, setAuth);
@@ -24,10 +30,11 @@ const Posts = () => {
         }
       );
       let { posts } = await response.json();
+      setPostsLength(posts.length);
       setPosts(posts);
     };
     fetchPosts();
-  }, []);
+  }, [setPostsLength]);
 
   const togglePrivacy = async (e, post) => {
     e.preventDefault();
@@ -51,12 +58,11 @@ const Posts = () => {
   };
 
   const renderPrivacy = (bool) => {
-    return bool ? "Public" : "Private";
-  };
-
-  const togglePreview = (e) => {
-    e.preventDefault();
-    setPreview((state) => !state);
+    return bool ? (
+      <FontAwesomeIcon icon={faLockOpen} />
+    ) : (
+      <FontAwesomeIcon icon={faLock} />
+    );
   };
 
   const onDeleteLinkClick = async (e, id) => {
@@ -74,6 +80,7 @@ const Posts = () => {
       },
     });
     const { posts: updatedPosts } = await response.json();
+    setPostsLength(updatedPosts.length)
     setPosts(updatedPosts);
   };
 
@@ -89,63 +96,27 @@ const Posts = () => {
 
   return (
     posts && (
-      <>
-        {(!auth || preview) && (
-          <div style={{ border: "2px solid black", padding: "10px" }}>
-            <p>
-              Hi, I'm Harrison. I currently work at{" "}
-              <a href="https://coderacademy.edu.au/">CoderAcademy</a> where I've
-              mentored around 100 students leading classes and assisting with
-              content development. Here are my current{" "}
-              <Link to="/projects">projects</Link>.
-            </p>
-          </div>
-        )}
-        <div>
-          {auth && !preview && (
-            <>
-              <Link to="/">
-                <button
-                  style={{
-                    width: "100px",
-                    height: "40px",
-                    marginRight: "10px",
-                  }}
+      <div>
+        {posts.map((post, index) => {
+          if (auth || post.public) {
+            return (
+              <div key={index}>
+                <h3 style={{ margin: "0px" }}>
+                  <Link to={`/posts/${post.id}`}>{createTitle(post.body)}</Link>
+                </h3>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  Write
-                </button>
-              </Link>
-              <Link to="/posts">
-                <button
-                  style={{ width: "100px", height: "40px" }}
-                  onClick={togglePreview}
-                >
-                  Preview
-                </button>
-              </Link>
-            </>
-          )}
-          {posts.map((post, index) => {
-            if ((auth && !preview) || post.public) {
-              return (
-                <div key={index}>
-                  <h3>
-                    <Link to={`/posts/${post.id}`}>
-                      {createTitle(post.body)}
-                    </Link>
-                  </h3>
-                  <p>
-                    {moment(post.created_at).format("MMMM Do YYYY, h:mm:ss a")}
+                  <p style={{ margin: "0px" }}>
+                    {moment(post.created_at).format("MM/D/YY, HH:mm")}
                   </p>
-                  {auth && !preview && (
-                    <>
+                  {auth && (
+                    <div className="action-icons">
                       <Link
                         to="/"
                         className="post-links"
                         onClick={(e) => togglePrivacy(e, post)}
-                        style={
-                          post.public ? {} : { opacity: 0.7 }
-                        }
+                        style={post.public ? {} : { opacity: 0.7 }}
                       >
                         {renderPrivacy(post.public)}
                       </Link>
@@ -153,26 +124,26 @@ const Posts = () => {
                         to={`/posts/${post.id}/edit`}
                         className="post-links"
                       >
-                        Edit
+                        <FontAwesomeIcon icon={faEdit} />
                       </Link>
                       <Link
                         to={`/posts`}
                         className="post-links"
                         onClick={(e) => onDeleteLinkClick(e, post.id)}
                       >
-                        Delete
+                        <FontAwesomeIcon icon={faTrashAlt} />
                       </Link>
-                    </>
+                    </div>
                   )}
-                  <hr />
                 </div>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </div>
-      </>
+                <hr />
+              </div>
+            );
+          } else {
+            return null;
+          }
+        })}
+      </div>
     )
   );
 };
