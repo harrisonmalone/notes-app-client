@@ -31,7 +31,7 @@ const Login = () => {
 
   return (
     <>
-      <h1>Login</h1>
+      <h3>Login</h3>
       <form className="login-form" onSubmit={onFormSubmit}>
         <div className="form-group">
           <label htmlFor="password">Password</label>

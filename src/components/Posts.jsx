@@ -173,6 +173,9 @@ const Posts = () => {
             }
           })}
         </div>
+        <footer>
+          <Link to="/login" style={{ fontSize: "small"}}>Login</Link>
+        </footer>
       </>
     )
   );
