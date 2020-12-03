@@ -128,7 +128,7 @@ const Posts = () => {
             if (auth || post.public) {
               return (
                 <div key={index}>
-                  <h3 style={{ margin: "0px" }}>
+                  <h3 className="post-title">
                     <Link to={`/posts/${post.id}`}>
                       {createTitle(post.body)}
                     </Link>

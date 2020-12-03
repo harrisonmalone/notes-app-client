@@ -9,7 +9,6 @@ const Login = () => {
   const { setAuth } = useContext(AuthContext);
   const { posts, setPostLength } = useContext(PostsContext);
   const contextPostsLength = posts?.length;
-  console.log(contextPostsLength)
 
   useEffect(() => {
     return () => {
