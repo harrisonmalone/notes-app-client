@@ -1,25 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { PostsContext } from "../context/PostsContext";
 
 const Posts = () => {
-  const [posts, setPosts] = useState(null);
+  const { posts, setPostLength, postLength } = useContext(PostsContext);
+  const [publicPosts, setPublicPosts] = useState(null);
+  const [previewPostLength, setPreviewPostLength] = useState(null);
+  const [unmounting, setUnmounting] = useState(false)
+  const contextPostsLength = posts?.length
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/posts`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+      if (postLength !== previewPostLength) {
+        if (posts) {
+          let publicPosts = posts.filter((post) => post.public);
+          let postLength = publicPosts.length;
+          setPostLength(postLength);
+          setPreviewPostLength(postLength);
+          setPublicPosts(publicPosts);
         }
-      );
-      let { posts } = await response.json();
-      setPosts(posts);
+      }
     };
     fetchPosts();
-  }, []);
+  }, [posts, setPostLength, previewPostLength, postLength]);
+
+  useEffect(() => {
+    return () => {
+      setUnmounting(true)
+      if (unmounting) {
+        setPostLength(contextPostsLength)
+        setUnmounting(false)
+      }
+    }
+  }, [contextPostsLength, unmounting, setPostLength]);
 
   const createTitle = (body) => {
     let title = body.split("\n")[0];
@@ -32,7 +46,7 @@ const Posts = () => {
   };
 
   return (
-    posts && (
+    publicPosts && (
       <>
         <div
           className="profile"
@@ -51,28 +65,22 @@ const Posts = () => {
           </p>
         </div>
         <div>
-          {posts.map((post, index) => {
-            if (post.public) {
-              return (
-                <div key={index}>
-                  <h3 style={{ margin: "0px" }}>
-                    <Link to={`/posts/${post.id}`}>
-                      {createTitle(post.body)}
-                    </Link>
-                  </h3>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <p style={{ margin: "0px" }}>
-                      {moment(post.created_at).format("MM/D/YY, HH:mm")}
-                    </p>
-                  </div>
-                  <hr />
+          {publicPosts.map((post, index) => {
+            return (
+              <div key={index}>
+                <h3 style={{ margin: "0px" }}>
+                  <Link to={`/posts/${post.id}`}>{createTitle(post.body)}</Link>
+                </h3>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <p style={{ margin: "0px" }}>
+                    {moment(post.created_at).format("MM/D/YY, HH:mm")}
+                  </p>
                 </div>
-              );
-            } else {
-              return null;
-            }
+                <hr />
+              </div>
+            );
           })}
         </div>
       </>

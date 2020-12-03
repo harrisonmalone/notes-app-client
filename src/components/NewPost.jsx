@@ -1,12 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import keyboardjs from "keyboardjs";
+import { PostsContext } from '../context/PostsContext'
 import { AuthContext } from '../context/AuthContext'
 
 const NewPost = () => {
   const [saved, setSaved] = useState(false);
   const [body, setBody] = useState("");
   const [id, setId] = useState(null);
-  const { setPostLength } = useContext(AuthContext)
+  const { setPostLength, setPosts } = useContext(PostsContext)
+  const { auth } = useContext(AuthContext)
 
   const saveBtn = (e) => {
     e.preventDefault();
@@ -33,7 +35,7 @@ const NewPost = () => {
 
   useEffect(() => {
     const createPost = async () => {
-      const response = await fetch(
+      const createPostResponse = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/posts`,
         {
           method: "POST",
@@ -46,9 +48,24 @@ const NewPost = () => {
           }),
         }
       );
-      const { id } = await response.json();
+      const { id } = await createPostResponse.json();
       setId(id);
-      setPostLength("add 1")
+      const postsResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/posts`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      let { posts } = await postsResponse.json();
+      let postLength = posts.length
+      if (!auth) {
+        let publicPosts = posts.filter((post) => post.public)
+        postLength = publicPosts.length
+      }
+      setPostLength(postLength);
+      setPosts(posts);
     };
 
     const editPost = async () => {

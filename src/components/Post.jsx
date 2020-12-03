@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import showdown from "showdown";
 import moment from "moment";
 import { AuthContext } from "../context/AuthContext";
+import { PostsContext } from "../context/PostsContext";
 import { getAuthStatus } from "../utils/getAuthStatus";
 import { Link, Redirect } from "react-router-dom";
 
@@ -9,6 +10,7 @@ const Post = (props) => {
   const [post, setPost] = useState(null);
   const [html, setHtml] = useState("");
   const { auth, setAuth, loading } = useContext(AuthContext);
+  const { postLength, setPostLength } = useContext(PostsContext);
   const id = props.match.params.id;
 
   useEffect(() => {
@@ -28,6 +30,21 @@ const Post = (props) => {
     };
     fetchPost();
   }, [id]);
+
+  useEffect(() => {
+    const getPostLength = async () => {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/stats`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}` 
+        }
+      })
+      let { post_length: fetchedPostLength } = await response.json()
+      setPostLength(fetchedPostLength)
+    }
+    if (!postLength) {
+      getPostLength()
+    }
+  }, [postLength, setPostLength])
 
   const createMarkup = () => {
     return { __html: html };

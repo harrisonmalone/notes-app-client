@@ -1,7 +1,8 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { AuthContext } from "../context/AuthContext";
+import { PostsContext } from "../context/PostsContext";
 import { getAuthStatus } from "../utils/getAuthStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,8 +13,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Posts = () => {
-  const { auth, setAuth, loading, setPostLength } = useContext(AuthContext);
-  const [posts, setPosts] = useState(null);
+  const { auth, setAuth, loading } = useContext(AuthContext);
+  const { posts, setPosts, setPostLength } = useContext(PostsContext);
 
   useEffect(() => {
     getAuthStatus(loading, setAuth);
@@ -21,19 +22,27 @@ const Posts = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/posts`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+      if (!posts && !loading) {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/posts`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        let { posts: fetchedPosts } = await response.json();
+        let postLength = fetchedPosts.length
+        if (!auth) {
+          let publicPosts = fetchedPosts.filter((post) => post.public)
+          postLength = publicPosts.length
         }
-      );
-      let { posts } = await response.json();
-      setPosts(posts);
+        setPostLength(postLength);
+        setPosts(fetchedPosts);
+      }
     };
     fetchPosts();
-  }, []);
+  }, [setPosts, posts, auth, setPostLength, loading]);
 
   const togglePrivacy = async (e, post) => {
     e.preventDefault();
@@ -80,7 +89,7 @@ const Posts = () => {
     });
     const { posts: updatedPosts } = await response.json();
     setPosts(updatedPosts);
-    setPostLength(updatedPosts.length)
+    setPostLength(updatedPosts.length);
   };
 
   const createTitle = (body) => {

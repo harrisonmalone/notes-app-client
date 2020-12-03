@@ -3,8 +3,7 @@ import { AppReducer } from "./AppReducer";
 
 const initialState = {
   auth: false,
-  loading: true,
-  postLength: null
+  loading: true
 }
 
 export const AuthContext = createContext(initialState)
@@ -19,23 +18,11 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
-  function setPostLength(length) {
-    if (typeof length === "string") {
-      length = state.postLength + 1
-    }
-    dispatch({
-      type: "SET_POST_LENGTH",
-      payload: length
-    })
-  }
-
   return (
     <AuthContext.Provider value={{
       auth: state.auth,
       loading: state.loading,
-      postLength: state.postLength,
-      setAuth,
-      setPostLength
+      setAuth
     }}>
       {children}
     </AuthContext.Provider>

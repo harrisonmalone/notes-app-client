@@ -11,6 +11,12 @@ export const AppReducer = (state, action) => {
         ...state,
         postLength: action.payload
       }
+    case "SET_POSTS":
+      return {
+        ...state,
+        posts: action.payload,
+        postsLoading: false
+      }
     default: 
       return state
   }
