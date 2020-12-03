@@ -23,7 +23,6 @@ const ProtectedRoute = (props) => {
             },
           }
         );
-        console.log("here in protected route");
         let { posts: fetchedPosts } = await response.json();
         let postLength = fetchedPosts.length;
         if (!auth) {

@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import keyboardjs from "keyboardjs";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { PostsContext } from "../context/PostsContext";
 
 const EditPost = (props) => {
   const [saved, setSaved] = useState(true);
   const [body, setBody] = useState("");
   const [createdAt, setCreatedAt] = useState("");
   const [loading, setLoading] = useState(null);
+  const { setPosts } = useContext(PostsContext);
   const id = props.match.params.id;
 
   const saveBtn = (e) => {
@@ -58,6 +60,16 @@ const EditPost = (props) => {
           post: { body },
         }),
       });
+      const postsResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/posts`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      let { posts } = await postsResponse.json();
+      setPosts(posts)
     };
     if (saved) {
       editPost();
