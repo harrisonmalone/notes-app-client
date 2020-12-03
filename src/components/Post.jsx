@@ -33,25 +33,28 @@ const Post = (props) => {
 
   useEffect(() => {
     const getPostLength = async () => {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/stats`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}` 
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/stats`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      })
-      let { post_length: fetchedPostLength } = await response.json()
-      setPostLength(fetchedPostLength)
-    }
+      );
+      let { post_length: fetchedPostLength } = await response.json();
+      setPostLength(fetchedPostLength);
+    };
     if (!postLength) {
-      getPostLength()
+      getPostLength();
     }
-  }, [postLength, setPostLength])
+  }, [postLength, setPostLength]);
 
   const createMarkup = () => {
     return { __html: html };
   };
 
   if (!post) {
-    return null
+    return null;
   } else {
     if (!auth && !post.public) {
       return <Redirect to="/posts" />;
@@ -68,7 +71,7 @@ const Post = (props) => {
           )}
           <div dangerouslySetInnerHTML={createMarkup()}></div>
         </div>
-      )
+      );
     }
   }
 };

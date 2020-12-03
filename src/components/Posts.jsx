@@ -32,10 +32,10 @@ const Posts = () => {
           }
         );
         let { posts: fetchedPosts } = await response.json();
-        let postLength = fetchedPosts.length
+        let postLength = fetchedPosts.length;
         if (!auth) {
-          let publicPosts = fetchedPosts.filter((post) => post.public)
-          postLength = publicPosts.length
+          let publicPosts = fetchedPosts.filter((post) => post.public);
+          postLength = publicPosts.length;
         }
         setPostLength(postLength);
         setPosts(fetchedPosts);

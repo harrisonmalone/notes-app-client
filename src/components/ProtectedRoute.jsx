@@ -23,7 +23,7 @@ const ProtectedRoute = (props) => {
             },
           }
         );
-        console.log("here in protected route")
+        console.log("here in protected route");
         let { posts: fetchedPosts } = await response.json();
         let postLength = fetchedPosts.length;
         if (!auth) {
@@ -32,8 +32,8 @@ const ProtectedRoute = (props) => {
         }
         setPostLength(postLength);
         setPosts(fetchedPosts);
-      };
       }
+    };
     fetchPosts();
   }, [auth, setPostLength, postLength, setPosts]);
 

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import keyboardjs from "keyboardjs";
-import { Link } from 'react-router-dom'
-import moment from 'moment'
+import { Link } from "react-router-dom";
+import moment from "moment";
 
 const EditPost = (props) => {
   const [saved, setSaved] = useState(true);
   const [body, setBody] = useState("");
-  const [createdAt, setCreatedAt] = useState("")
+  const [createdAt, setCreatedAt] = useState("");
   const [loading, setLoading] = useState(null);
   const id = props.match.params.id;
 
@@ -40,7 +40,7 @@ const EditPost = (props) => {
       );
       const post = await response.json();
       setBody(post.body);
-      setCreatedAt(post.created_at)
+      setCreatedAt(post.created_at);
       setLoading(true);
     };
     fetchPost();

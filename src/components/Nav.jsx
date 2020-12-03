@@ -10,9 +10,7 @@ const Nav = () => {
   return (
     <nav>
       <h1>
-        <Link to="/posts">
-          Notes
-        </Link>
+        <Link to="/posts">Notes</Link>
       </h1>
       <div className="nav-action-links">
         {auth && (

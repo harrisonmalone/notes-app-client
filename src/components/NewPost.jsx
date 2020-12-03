@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import keyboardjs from "keyboardjs";
-import { PostsContext } from '../context/PostsContext'
-import { AuthContext } from '../context/AuthContext'
+import { PostsContext } from "../context/PostsContext";
+import { AuthContext } from "../context/AuthContext";
 
 const NewPost = () => {
   const [saved, setSaved] = useState(false);
   const [body, setBody] = useState("");
   const [id, setId] = useState(null);
-  const { setPostLength, setPosts } = useContext(PostsContext)
-  const { auth } = useContext(AuthContext)
+  const { setPostLength, setPosts } = useContext(PostsContext);
+  const { auth } = useContext(AuthContext);
 
   const saveBtn = (e) => {
     e.preventDefault();
@@ -59,10 +59,10 @@ const NewPost = () => {
         }
       );
       let { posts } = await postsResponse.json();
-      let postLength = posts.length
+      let postLength = posts.length;
       if (!auth) {
-        let publicPosts = posts.filter((post) => post.public)
-        postLength = publicPosts.length
+        let publicPosts = posts.filter((post) => post.public);
+        postLength = publicPosts.length;
       }
       setPostLength(postLength);
       setPosts(posts);

@@ -7,8 +7,8 @@ const Posts = () => {
   const { posts, setPostLength, postLength } = useContext(PostsContext);
   const [publicPosts, setPublicPosts] = useState(null);
   const [previewPostLength, setPreviewPostLength] = useState(null);
-  const [unmounting, setUnmounting] = useState(false)
-  const contextPostsLength = posts?.length
+  const [unmounting, setUnmounting] = useState(false);
+  const contextPostsLength = posts?.length;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -27,12 +27,12 @@ const Posts = () => {
 
   useEffect(() => {
     return () => {
-      setUnmounting(true)
+      setUnmounting(true);
       if (unmounting) {
-        setPostLength(contextPostsLength)
-        setUnmounting(false)
+        setPostLength(contextPostsLength);
+        setUnmounting(false);
       }
-    }
+    };
   }, [contextPostsLength, unmounting, setPostLength]);
 
   const createTitle = (body) => {
