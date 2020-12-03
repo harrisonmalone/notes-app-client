@@ -36,6 +36,8 @@ const ProtectedRoute = (props) => {
     fetchPosts();
   }, [auth, setPostLength, postLength, setPosts]);
 
+  console.log(loading)
+  console.log(auth)
   if (!loading && !auth) {
     return <Redirect to="/posts" />;
   } else {

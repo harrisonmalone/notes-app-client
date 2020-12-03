@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { PostsContext } from "../context/PostsContext";
 
 const Login = () => {
   const [password, setPassword] = useState("");
   const history = useHistory();
+  const { setAuth } = useContext(AuthContext);
+  const { posts, setPostLength } = useContext(PostsContext);
+  const contextPostsLength = posts?.length;
+  console.log(contextPostsLength)
+
+  useEffect(() => {
+    return () => {
+      setPostLength(contextPostsLength);
+    };
+  }, [contextPostsLength, setPostLength]);
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +36,8 @@ const Login = () => {
       } else {
         const { jwt } = await response.json();
         localStorage.setItem("token", jwt);
-        history.push("/");
+        setAuth({ auth: true, loading: false })
+        history.push("/posts");
       }
     } catch (err) {}
   };
