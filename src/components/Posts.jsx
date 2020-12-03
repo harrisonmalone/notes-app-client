@@ -145,7 +145,7 @@ const Posts = () => {
                           to="/"
                           className="post-links"
                           onClick={(e) => togglePrivacy(e, post)}
-                          style={post.public ? {} : { opacity: 0.7 }}
+                          style={post.public ? {} : { color: "black" }}
                         >
                           {renderPrivacy(post.public)}
                         </Link>

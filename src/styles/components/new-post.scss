@@ -2,7 +2,7 @@
   height: calc(70vh - 60px);
   border: none;
   padding: 0px;
-  font-size: x-large;
+  font-size: large;
   resize: none;
   &:focus {
     outline: none;
@@ -19,9 +19,3 @@
   width: 100px;
   height: 50px;
 }
-
-// @media only screen and (min-width: 600px) {
-//   .save-btn {
-//     display: none;
-//   }
-// }
