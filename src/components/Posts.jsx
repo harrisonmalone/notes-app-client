@@ -75,21 +75,24 @@ const Posts = () => {
 
   const onDeleteLinkClick = async (e, id) => {
     e.preventDefault();
-    await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    const { posts: updatedPosts } = await response.json();
-    setPosts(updatedPosts);
-    setPostLength(updatedPosts.length);
+    const wishToDelete = window.confirm("Do you wish to delete this note?")
+    if (wishToDelete) {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const { posts: updatedPosts } = await response.json();
+      setPosts(updatedPosts);
+      setPostLength(updatedPosts.length);
+    }
   };
 
   const createTitle = (body) => {
